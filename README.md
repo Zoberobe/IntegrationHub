@@ -2,6 +2,10 @@
 
 An integration case study for orders, **Stripe test-mode payments**, verified webhooks, queued simulated shipping, auditable retries, and an operations dashboard.
 
+## Public interactive demo
+
+[Explore the browser demo](https://zoberobe.github.io/IntegrationHub/) to step through a temporary shipping failure, recovery, and duplicate webhook. It is a clearly labeled local simulation; the real Stripe test-mode evidence is below. The demo source is in [`docs/`](docs/).
+
 ## Watch the verified Stripe sandbox flow
 
 [![Stripe sandbox demonstration: payment, retry, and one shipment](media/stripe-success.png)](media/stripe-sandbox-demo.mp4)
