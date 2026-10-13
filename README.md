@@ -2,6 +2,8 @@
 
 An integration case study for orders, **Stripe test-mode payments**, verified webhooks, queued simulated shipping, auditable retries, and an operations dashboard.
 
+**Client problem:** A payment succeeds, shipping fails, and the same webhook arrives again. The order must recover without creating a second shipment. **Recorded result:** one temporary shipping failure, one successful retry, and exactly one shipment. [Watch the 23-second Stripe test-mode video](media/stripe-sandbox-demo.mp4) or [read the Upwork portfolio copy](portfolio/upwork_item.md).
+
 ## Public interactive demo
 
 [Explore the browser demo](https://zoberobe.github.io/IntegrationHub/) to step through a temporary shipping failure, recovery, and duplicate webhook. It is a clearly labeled local simulation; the real Stripe test-mode evidence is below. The demo source is in [`docs/`](docs/).
@@ -76,6 +78,8 @@ python -m venv .venv
 ```
 
 The nine test cases cover duplicate webhooks, signature rejection, payment timeouts and idempotency, temporary shipping failure and recovery, duplicate task delivery, the retry limit, the sandbox request shape, and the HTTP API. They use in-memory SQLite for domain rules. The local PostgreSQL/Redis/Celery path, a four-call PostgreSQL row-lock check, and a real Stripe test-mode payment were verified separately.
+
+GitHub Actions runs these nine SQLite tests on pushes to `main` and on pull requests. This CI job does not run the Docker stack or make Stripe calls; use [VALIDATION.md](VALIDATION.md) for those separate checks.
 
 ## Validation status
 

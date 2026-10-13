@@ -16,8 +16,8 @@
     <div class="shell header-inner">
       <a class="brand" href="#top" aria-label="IntegrationHub home"><span class="brand-mark">I<span>H</span></span> IntegrationHub</a>
       <nav aria-label="Main navigation">
+        <a href="#evidence">Watch the video</a>
         <a href="#simulation">Try the flow</a>
-        <a href="#evidence">Real evidence</a>
         <a href="#architecture">Architecture</a>
       </nav>
       <a class="header-link" href="https://github.com/Zoberobe/IntegrationHub" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span></a>
@@ -31,8 +31,8 @@
         <h1>A payment succeeds.<br><em>Shipping fails.</em><br>The order stays traceable.</h1>
         <p>Follow an idempotent Stripe webhook through a persisted shipping job, a temporary failure, and a safe retry. Then inspect the evidence from a real test-mode run.</p>
         <div class="hero-actions">
-          <a class="button button-primary" href="#simulation">Try the simulation <span aria-hidden="true">→</span></a>
-          <a class="button button-secondary" href="#evidence">Watch the verified run</a>
+          <a class="button button-primary" href="#evidence">Watch the Stripe test-mode video <span aria-hidden="true">→</span></a>
+          <a class="button button-secondary" href="#simulation">Try the simulation</a>
         </div>
         <p class="hero-note">This page uses local, fictional demo data. The video and audit below document the separate Stripe sandbox validation.</p>
       </div>
@@ -76,7 +76,7 @@
     <section class="evidence-section shell" id="evidence">
       <div class="section-heading"><div><span class="section-kicker">02 / VERIFY</span><h2>See the real sandbox run</h2><p>The recording uses an actual Stripe test-mode PaymentIntent and a CLI-forwarded, signed webhook. Shipping remains a documented simulation.</p></div><span class="verified-badge">Stripe test mode · verified</span></div>
       <div class="evidence-grid">
-        <div class="video-card"><video controls preload="metadata" poster="assets/stripe-success.png" aria-label="Stripe sandbox payment and shipping retry demonstration"><source src="assets/stripe-sandbox-demo.mp4" type="video/mp4">Your browser does not support video playback.</video><div class="video-caption"><strong>23-second validation walkthrough</strong><span>Payment → webhook → temporary failure → recovery</span></div></div>
+        <div class="video-card"><video controls playsinline preload="metadata" poster="assets/stripe-success.png" aria-label="Stripe sandbox payment and shipping retry demonstration"><source src="assets/stripe-sandbox-demo.mp4" type="video/mp4">Your browser does not support video playback. <a href="assets/stripe-sandbox-demo.mp4">Open the video</a>.</video><div class="video-caption"><strong>23-second validation walkthrough</strong><span>Payment → webhook → temporary failure → recovery</span></div></div>
         <div class="proof-card card"><span class="micro-label">RECORDED RESULT</span><h3>One payment.<br>One shipment.</h3><div class="proof-item"><span>PaymentIntent</span><strong>succeeded · livemode false</strong></div><div class="proof-item"><span>Shipping attempts</span><strong>2 · failure, then success</strong></div><div class="proof-item"><span>Same-event replay</span><strong>duplicate · no new shipment</strong></div><div class="proof-item"><span>Final state</span><strong>shipped</strong></div><div class="proof-links"><a href="https://github.com/Zoberobe/IntegrationHub/blob/main/media/stripe-rotated-key-audit.json" target="_blank" rel="noopener noreferrer">Payment audit ↗</a><a href="https://github.com/Zoberobe/IntegrationHub/blob/main/media/stripe-rotated-key-replay.json" target="_blank" rel="noopener noreferrer">Replay proof ↗</a></div></div>
       </div>
     </section>
