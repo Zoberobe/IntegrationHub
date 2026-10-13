@@ -1,0 +1,24 @@
+{
+  "order_id": "80cf2bd2-9fef-4b27-8ea6-ce171a13f763",
+  "payment_intent_id": "pi_3UOnbFCyBG9TdZp50qLGO1ty",
+  "payment_intent_status": "succeeded",
+  "stripe_livemode": false,
+  "stripe_request_id": "req_FnQqGDqMMn4Mc0",
+  "webhook_event_id": "evt_3UOnbFCyBG9TdZp501EF3jJx",
+  "shipping_attempts": [
+    {
+      "sequence": 1,
+      "outcome": "temporary_failure",
+      "error_code": "simulated_503"
+    },
+    {
+      "sequence": 2,
+      "outcome": "succeeded",
+      "error_code": null
+    }
+  ],
+  "shipment_count": 1,
+  "webhook_event_count": 1,
+  "final_state": "shipped",
+  "checked_at_utc": "2026-10-09T23:56:54.699750+00:00"
+}

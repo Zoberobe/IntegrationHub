@@ -1,0 +1,47 @@
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_DB: integrationhub
+      POSTGRES_USER: integrationhub
+      POSTGRES_PASSWORD: integrationhub
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U integrationhub"]
+      interval: 3s
+      retries: 20
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  redis:
+    image: redis:7-alpine
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 3s
+      retries: 20
+  api:
+    build: .
+    env_file: .env
+    ports:
+      - "${HOST_PORT:-54321}:8000"
+    depends_on:
+      db: {condition: service_healthy}
+      redis: {condition: service_healthy}
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/health')"]
+      interval: 3s
+      retries: 20
+  worker:
+    build: .
+    command: celery -A app.tasks.celery_app worker --loglevel=info
+    env_file: .env
+    depends_on:
+      api: {condition: service_healthy}
+      redis: {condition: service_healthy}
+  beat:
+    build: .
+    command: celery -A app.tasks.celery_app beat --loglevel=info
+    env_file: .env
+    depends_on:
+      api: {condition: service_healthy}
+      redis: {condition: service_healthy}
+volumes:
+  pgdata:

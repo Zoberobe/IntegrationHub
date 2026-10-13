@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#091624">
+  <meta name="description" content="Explore IntegrationHub's payment webhook and shipping retry flow, then inspect evidence from a real Stripe test-mode run.">
+  <title>IntegrationHub — Interactive Demo</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="brand" href="#top" aria-label="IntegrationHub home"><span class="brand-mark">I<span>H</span></span> IntegrationHub</a>
+      <nav aria-label="Main navigation">
+        <a href="#simulation">Try the flow</a>
+        <a href="#evidence">Real evidence</a>
+        <a href="#architecture">Architecture</a>
+      </nav>
+      <a class="header-link" href="https://github.com/Zoberobe/IntegrationHub" target="_blank" rel="noopener noreferrer">View code <span aria-hidden="true">↗</span></a>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero shell" id="top">
+      <div class="hero-copy">
+        <div class="eyebrow"><span class="live-dot" aria-hidden="true"></span> Integration case study · Interactive preview</div>
+        <h1>A payment succeeds.<br><em>Shipping fails.</em><br>The order stays traceable.</h1>
+        <p>Follow an idempotent Stripe webhook through a persisted shipping job, a temporary failure, and a safe retry. Then inspect the evidence from a real test-mode run.</p>
+        <div class="hero-actions">
+          <a class="button button-primary" href="#simulation">Try the simulation <span aria-hidden="true">→</span></a>
+          <a class="button button-secondary" href="#evidence">Watch the verified run</a>
+        </div>
+        <p class="hero-note">This page uses local, fictional demo data. The video and audit below document the separate Stripe sandbox validation.</p>
+      </div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="visual-bar"><span></span><span></span><span></span><strong>integration trace</strong></div>
+        <div class="visual-line"><i class="visual-step green"></i><div><small>01 · PAYMENT</small><b>Stripe test mode</b><span>PaymentIntent succeeded</span></div><strong>200 OK</strong></div>
+        <div class="visual-line"><i class="visual-step blue"></i><div><small>02 · WEBHOOK</small><b>Signature verified</b><span>Event stored once</span></div><strong>1 event</strong></div>
+        <div class="visual-line"><i class="visual-step amber"></i><div><small>03 · SHIPPING</small><b>Temporary failure</b><span>Retry scheduled</span></div><strong>503</strong></div>
+        <div class="visual-line"><i class="visual-step green"></i><div><small>04 · RECOVERY</small><b>Shipment created</b><span>Stable idempotency key</span></div><strong>1 shipment</strong></div>
+        <div class="visual-footer"><span>PostgreSQL</span><span>Redis</span><span>Celery</span><span>FastAPI</span></div>
+      </div>
+    </section>
+
+    <section class="simulation-section" id="simulation">
+      <div class="shell">
+        <div class="section-heading">
+          <div><span class="section-kicker">01 / EXPLORE</span><h2>Run the failure and recovery</h2><p>Click through a deterministic, browser-only illustration of the order state machine.</p></div>
+          <span class="demo-badge">Interactive simulation · no Stripe calls</span>
+        </div>
+        <div class="demo-grid">
+          <div class="demo-main card">
+            <div class="card-top"><div><span class="micro-label">DEMO ORDER</span><h3>Order IH-DEMO-001</h3></div><span id="state-badge" class="state-badge neutral">awaiting_payment</span></div>
+            <div class="order-meta"><span>BRL 25.00</span><span>Fictional data</span><span>Shipping fails once</span></div>
+            <div class="timeline" aria-label="Order stages">
+              <div class="timeline-step" id="step-payment"><span class="step-icon">1</span><div><strong>Payment signal</strong><small id="payment-detail">Awaiting request</small></div></div>
+              <div class="timeline-step" id="step-webhook"><span class="step-icon">2</span><div><strong>Verified webhook</strong><small id="webhook-detail">Not received</small></div></div>
+              <div class="timeline-step" id="step-failure"><span class="step-icon">3</span><div><strong>Shipping attempt</strong><small id="failure-detail">Not started</small></div></div>
+              <div class="timeline-step" id="step-recovery"><span class="step-icon">4</span><div><strong>Recovery</strong><small id="recovery-detail">Awaiting retry</small></div></div>
+            </div>
+            <div class="demo-actions"><button id="start-button" class="button button-primary" type="button">Confirm payment and deliver webhook</button><button id="retry-button" class="button button-secondary" type="button" disabled>Run shipping retry</button><button id="replay-button" class="button button-secondary" type="button" disabled>Replay same webhook</button><button id="reset-button" class="text-button" type="button">Reset</button></div>
+          </div>
+          <aside class="demo-side">
+            <div class="metric-card card"><span class="micro-label">OPERATIONAL VIEW</span><div class="metric-row"><div><strong id="attempt-count">0</strong><span>Shipping attempts</span></div><div><strong id="shipment-count">0</strong><span>Shipments</span></div><div><strong id="event-count">0</strong><span>Webhook events stored</span></div></div></div>
+            <div class="status-card card"><span class="micro-label">NEXT ACTION</span><strong id="next-action">Start payment</strong><p id="status-message" aria-live="polite">The order exists. No external operation has started.</p></div>
+            <div class="log-card card"><span class="micro-label">INTEGRATION ATTEMPTS</span><ol id="attempt-list"><li class="empty-log">No attempts yet.</li></ol></div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <section class="evidence-section shell" id="evidence">
+      <div class="section-heading"><div><span class="section-kicker">02 / VERIFY</span><h2>See the real sandbox run</h2><p>The recording uses an actual Stripe test-mode PaymentIntent and a CLI-forwarded, signed webhook. Shipping remains a documented simulation.</p></div><span class="verified-badge">Stripe test mode · verified</span></div>
+      <div class="evidence-grid">
+        <div class="video-card"><video controls preload="metadata" poster="assets/stripe-success.png" aria-label="Stripe sandbox payment and shipping retry demonstration"><source src="assets/stripe-sandbox-demo.mp4" type="video/mp4">Your browser does not support video playback.</video><div class="video-caption"><strong>23-second validation walkthrough</strong><span>Payment → webhook → temporary failure → recovery</span></div></div>
+        <div class="proof-card card"><span class="micro-label">RECORDED RESULT</span><h3>One payment.<br>One shipment.</h3><div class="proof-item"><span>PaymentIntent</span><strong>succeeded · livemode false</strong></div><div class="proof-item"><span>Shipping attempts</span><strong>2 · failure, then success</strong></div><div class="proof-item"><span>Same-event replay</span><strong>duplicate · no new shipment</strong></div><div class="proof-item"><span>Final state</span><strong>shipped</strong></div><div class="proof-links"><a href="https://github.com/Zoberobe/IntegrationHub/blob/main/media/stripe-rotated-key-audit.json" target="_blank" rel="noopener noreferrer">Payment audit ↗</a><a href="https://github.com/Zoberobe/IntegrationHub/blob/main/media/stripe-rotated-key-replay.json" target="_blank" rel="noopener noreferrer">Replay proof ↗</a></div></div>
+      </div>
+    </section>
+
+    <section class="architecture-section" id="architecture"><div class="shell"><div class="section-heading"><div><span class="section-kicker">03 / UNDER THE HOOD</span><h2>Why the retry is safe</h2><p>Each boundary has a durable record and a stable key.</p></div></div><div class="architecture-grid"><article class="architecture-card"><span>01</span><h3>Payment</h3><p>A stable order key is sent with the Stripe PaymentIntent request. Repeating the request does not start a second payment.</p></article><article class="architecture-card"><span>02</span><h3>Webhook</h3><p>The raw body signature and timestamp are checked. A unique event ID makes repeated delivery an acknowledged duplicate.</p></article><article class="architecture-card"><span>03</span><h3>Shipping</h3><p>The job persists in PostgreSQL. Celery retries temporary failures, and a unique shipment key prevents double creation.</p></article></div><div class="closing-link"><p>The backend and tests are available for inspection.</p><a class="button button-primary" href="https://github.com/Zoberobe/IntegrationHub" target="_blank" rel="noopener noreferrer">Explore the repository <span aria-hidden="true">↗</span></a></div></div></section>
+  </main>
+  <footer><div class="shell footer-inner"><strong>IntegrationHub</strong><span>Technical integration prototype · Public simulation with separate Stripe sandbox evidence</span><a href="#top">Back to top ↑</a></div></footer>
+</body>
+</html>

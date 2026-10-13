@@ -1,0 +1,33 @@
+{
+  "order_id": "db564803-6d66-4581-bdfc-d7d8b9e5bd02",
+  "webhook_results": [
+    "processed",
+    "duplicate"
+  ],
+  "states_observed": [
+    "shipping_pending",
+    "shipping_retrying",
+    "shipped"
+  ],
+  "duplicate_task_results": [
+    "skipped",
+    "skipped"
+  ],
+  "shipping_attempts": [
+    {
+      "sequence": 1,
+      "outcome": "temporary_failure",
+      "error_code": "simulated_503"
+    },
+    {
+      "sequence": 2,
+      "outcome": "succeeded",
+      "error_code": null
+    }
+  ],
+  "shipment_count": 1,
+  "webhook_event_count": 1,
+  "final_state": "shipped",
+  "checked_at_utc": "2026-10-09T23:21:31.355389+00:00",
+  "stripe_api_called": false
+}

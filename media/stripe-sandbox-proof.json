@@ -1,0 +1,17 @@
+{
+  "order_id": "80cf2bd2-9fef-4b27-8ea6-ce171a13f763",
+  "stripe_event_id": "evt_3UOnbFCyBG9TdZp501EF3jJx",
+  "replay_result": "duplicate",
+  "before": {
+    "webhook_events": 1,
+    "shipments": 1
+  },
+  "after": {
+    "webhook_events": 1,
+    "shipments": 1
+  },
+  "final_state": "shipped",
+  "checked_at_utc": "2026-10-09T23:53:58.151007+00:00",
+  "stripe_api_called": true,
+  "replay_source": "Stripe event fetched by ID and signed locally"
+}

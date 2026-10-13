@@ -1,0 +1,15 @@
+{
+  "order_id": "50395f5e-e4ae-429e-843b-6c2f7cace118",
+  "concurrent_calls": 4,
+  "results": [
+    "skipped",
+    "skipped",
+    "skipped",
+    "succeeded"
+  ],
+  "shipping_attempt_count": 1,
+  "shipment_count": 1,
+  "final_state": "shipped",
+  "checked_at_utc": "2026-10-09T23:20:43.232153+00:00",
+  "stripe_api_called": false
+}
